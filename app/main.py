@@ -1,3 +1,4 @@
+import logging
 import os
 import time
 
@@ -7,6 +8,9 @@ from fastapi.responses import PlainTextResponse
 from google.api_core import exceptions as google_exceptions
 from prometheus_client import CONTENT_TYPE_LATEST, Counter, Histogram, generate_latest
 from pydantic import BaseModel
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s %(message)s")
+logger = logging.getLogger("ai-api")
 
 app = FastAPI(title="ai-api")
 
@@ -23,7 +27,7 @@ def get_model():
     if not api_key:
         raise HTTPException(status_code=500, detail="GEMINI_API_KEY is not configured")
     genai.configure(api_key=api_key)
-    return genai.GenerativeModel(os.environ.get("GEMINI_MODEL", "gemini-1.5-flash"))
+    return genai.GenerativeModel(os.environ.get("GEMINI_MODEL", "gemini-3.5-flash"))
 
 
 @app.post("/ask")
@@ -39,9 +43,11 @@ def ask(body: Question):
         raise
     except google_exceptions.ResourceExhausted:
         status = "429"
+        logger.warning("Gemini rate limit hit")
         raise HTTPException(status_code=429, detail="Gemini rate limit reached, retry later")
     except Exception:
         status = "502"
+        logger.exception("Gemini call failed")
         raise HTTPException(status_code=502, detail="Upstream Gemini error")
     finally:
         REQUESTS.labels(endpoint="/ask", status=status).inc()

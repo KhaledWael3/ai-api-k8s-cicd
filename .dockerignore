@@ -1,0 +1,13 @@
+.git
+.gitignore
+.gitattributes
+__pycache__
+*.pyc
+.pytest_cache
+.venv
+.env
+*.md
+k8s
+monitoring
+loadtest
+Jenkinsfile
