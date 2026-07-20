@@ -99,5 +99,3 @@ Prometheus scrapes the app through a ServiceMonitor labeled `release: monitoring
 ![pods in k9s](docs/screenshot-k9s.png)
 
 ![Grafana dashboard](docs/screenshot-grafana.png)
-
-![HPA scaling under load](docs/screenshot-hpa.png)
