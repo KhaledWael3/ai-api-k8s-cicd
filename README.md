@@ -55,11 +55,11 @@ The manifests stay about 95 percent unchanged because Kubernetes is the portabil
 
 Prerequisites: Docker Desktop, minikube, kubectl, helm.
 
-    git clone <this repo>
+    git clone https://github.com/KhaledWael3/ai-api-k8s-cicd.git
     cd ai-api-k8s-cicd
 
-    docker build -t <dockerhub-user>/ai-api:latest .
-    docker push <dockerhub-user>/ai-api:latest
+    docker build -t khaledwael/ai-api:latest .
+    docker push khaledwael/ai-api:latest
 
     minikube start --driver=docker
     minikube addons enable ingress
